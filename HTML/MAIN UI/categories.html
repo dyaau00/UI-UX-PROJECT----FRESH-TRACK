@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FreshTrack</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="logo">
+      <span class="logo-icon">🌿</span>
+      <span class="logo-text">FreshTrack</span>
+    </div>
+    <div class="search-wrap">
+      <input class="search-input" type="text" placeholder="Search food items..." id="searchInput" oninput="handleSearch(this.value)">
+    </div>
+  </div>
+
+  <div class="body">
+    <nav class="sidebar">
+      <button class="nav-btn" id="nav-dashboard" onclick="navigate('dashboard')"><span class="nav-icon">🏠</span> Dashboard</button>
+      <button class="nav-btn active" id="nav-categories" onclick="navigate('categories')"><span class="nav-icon">🗂️</span> Categories</button>
+      <button class="nav-btn" id="nav-statistics" onclick="navigate('statistics')"><span class="nav-icon">📊</span> Statistics</button>
+      <button class="nav-btn" id="nav-account" onclick="navigate('account')"><span class="nav-icon">👤</span> Account</button>
+    </nav>
+
+    <main class="main">
+
+      <!-- CATEGORIES -->
+      <div class="page active" id="page-categories">
+        <h1 class="page-title">Categories</h1>
+        <div class="card-list" id="categories-list"></div>
+      </div>
+
+      <!-- FOOD LIST -->
+      <div class="page" id="page-foodlist">
+        <button class="back-btn" onclick="navigate('categories')">← Back</button>
+        <div class="page-header">
+          <h1 class="page-title" id="foodlist-title" style="margin-bottom:0"></h1>
+          <button class="btn-add" onclick="openAddFood()">+ Add Food</button>
+        </div>
+        <div class="card-list" id="foodlist-items"></div>
+      </div>
+
+      <!-- FOOD DETAIL -->
+      <div class="page" id="page-fooddetail">
+        <button class="back-btn" onclick="backToFoodList()">← Back</button>
+        <div class="food-detail-header">
+          <span class="food-detail-emoji" id="detail-emoji"></span>
+          <span class="food-detail-name" id="detail-name"></span>
+        </div>
+        <div class="form-card">
+          <div class="form-info" id="detail-category"></div>
+          <div style="font-size:14px;margin-bottom:12px;">Available Quantity: <strong id="detail-qty"></strong></div>
+          <div class="form-field">
+            <label class="form-label">Select quantity to Consume / Discard</label>
+            <input class="form-input" type="number" id="detail-qty-input" min="1" placeholder="Enter quantity..." />
+          </div>
+          <div class="form-field">
+            <label class="form-label">Expiry Date</label>
+            <input class="form-input" type="date" id="detail-expiry-input" />
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-green" onclick="consumeFood()">Consumed</button>
+            <button class="btn btn-red" onclick="discardFood()">Discard</button>
+            <button class="btn btn-blue" onclick="openEditFood()">Edit</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADD FOOD -->
+      <div class="page" id="page-addfood">
+        <button class="back-btn" onclick="backToFoodList()">← Back</button>
+        <h1 class="page-title">Add Food</h1>
+        <div class="form-card">
+          <div class="form-field">
+            <label class="form-label">Food name</label>
+            <input class="form-input" type="text" id="add-name" placeholder="e.g. Strawberries" />
+          </div>
+          <div class="form-field">
+            <label class="form-label">Category</label>
+            <div class="select-wrap">
+              <select class="form-select" id="add-category">
+                <option value="">Select category...</option>
+                <option>Fruits &amp; Vegetables</option>
+                <option>Drinks</option>
+                <option>Dairy</option>
+                <option>Frozen</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Quantity</label>
+            <input class="form-input" type="number" id="add-qty" min="1" placeholder="Enter quantity..." />
+          </div>
+          <div class="form-field">
+            <label class="form-label">Expires in (days)</label>
+            <input class="form-input" type="number" id="add-expires" min="1" placeholder="e.g. 5" />
+          </div>
+          <div class="form-field">
+            <label class="form-label">Icon (emoji)</label>
+            <div class="emoji-picker-wrap" id="picker-add">
+              <div class="emoji-selected-display" onclick="togglePicker('add')">
+                <span class="sel-emoji" id="add-icon-display">🍎</span>
+                <span style="color:var(--text-mid);">Tap to choose icon</span>
+                <span class="sel-arrow">▼</span>
+              </div>
+              <div class="emoji-dropdown" id="add-icon-dropdown"></div>
+            </div>
+            <input type="hidden" id="add-icon" value="🍎" />
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-green" onclick="saveNewFood()">Save</button>
+            <button class="btn btn-gray" onclick="backToFoodList()">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- EDIT FOOD -->
+      <div class="page" id="page-editfood">
+        <button class="back-btn" onclick="navigate('fooddetail')">← Back</button>
+        <h1 class="page-title">Edit Food</h1>
+        <div class="form-card">
+          <div class="form-field">
+            <label class="form-label">Food Name</label>
+            <input class="form-input" type="text" id="edit-name" />
+          </div>
+          <div class="form-field">
+            <label class="form-label">Category</label>
+            <div id="edit-category-display" style="padding:10px 14px;border-radius:var(--radius-sm);border:1.5px solid #e0e0e0;background:#f3f7f3;font-size:14px;font-weight:600;color:var(--green-dark);"></div>
+            <input type="hidden" id="edit-category" />
+          </div>
+          <div class="form-field">
+            <label class="form-label">Quantity</label>
+            <input class="form-input" type="number" id="edit-qty" min="1" placeholder="Enter quantity..." />
+          </div>
+          <div class="form-field">
+            <label class="form-label">Expires in (days)</label>
+            <input class="form-input" type="number" id="edit-expires" min="1" placeholder="e.g. 5" />
+          </div>
+          <div class="form-field">
+            <label class="form-label">Icon (emoji)</label>
+            <div class="emoji-picker-wrap" id="picker-edit">
+              <div class="emoji-selected-display" onclick="togglePicker('edit')">
+                <span class="sel-emoji" id="edit-icon-display">🍎</span>
+                <span style="color:var(--text-mid);">Tap to choose icon</span>
+                <span class="sel-arrow">▼</span>
+              </div>
+              <div class="emoji-dropdown" id="edit-icon-dropdown"></div>
+            </div>
+            <input type="hidden" id="edit-icon" value="🍎" />
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-green" onclick="saveEditFood()">Save Changes</button>
+            <button class="btn btn-gray" onclick="navigate('fooddetail')">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DASHBOARD -->
+      <div class="page" id="page-dashboard">
+        <h1 class="page-title">Dashboard</h1>
+        <div id="dashboard-content"></div>
+      </div>
+
+      <!-- STATISTICS -->
+      <div class="page" id="page-statistics">
+        <h1 class="page-title">Statistics</h1>
+        <div id="statistics-content"></div>
+      </div>
+
+      <!-- ACCOUNT -->
+      <div class="page" id="page-account">
+        <h1 class="page-title">Account</h1>
+        <div class="profile-card">
+          <div class="profile-title">👤 Profile Information</div>
+          <div class="profile-info-grid">
+            <span class="profile-info-key">Name</span><span class="profile-info-val" id="acc-name">Revana Alshea</span>
+            <span class="profile-info-key">Email</span><span class="profile-info-val" id="acc-email">revanaalshea@gmail.com</span>
+            <span class="profile-info-key">Role</span><span class="profile-info-val">User</span>
+          </div>
+          <button class="btn btn-green" onclick="navigate('editprofile')">Edit Profile</button>
+        </div>
+        <div class="profile-card">
+          <div class="profile-title">📈 Activity Summary</div>
+          <div id="acc-summary"></div>
+          <div style="margin-top:14px">
+            <button class="btn btn-red" onclick="showToast('Logged out!')">Logout</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- EDIT PROFILE -->
+      <div class="page" id="page-editprofile">
+        <button class="back-btn" onclick="navigate('account')">← Back</button>
+        <h1 class="page-title">Edit Profile</h1>
+        <p style="color:var(--green-mid);font-size:13px;margin-bottom:16px;">Manage your profile and preference</p>
+        <div class="form-card">
+          <div class="form-field">
+            <label class="form-label">Name</label>
+            <input class="form-input" type="text" id="ep-name" value="Revana Alshea" />
+          </div>
+          <div class="form-field">
+            <label class="form-label">Email</label>
+            <input class="form-input" type="email" id="ep-email" value="revanaalshea@gmail.com" />
+          </div>
+          <div class="form-field">
+            <label class="form-label">Phone Number</label>
+            <input class="form-input" type="tel" id="ep-phone" value="0812-5635-2873" />
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-green" onclick="saveProfile()">Save</button>
+            <button class="btn btn-gray" onclick="navigate('account')">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
