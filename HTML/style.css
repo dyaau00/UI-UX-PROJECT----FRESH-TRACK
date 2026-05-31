@@ -1,0 +1,273 @@
+/* ==========================================================================
+   CONFIG, PALET WARNA & TIPOGRAFI (FreshTrack Integrated Design System)
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=DM+Serif+Display:ital@0;1&display=swap');
+
+:root {
+    --green-dark: #2d6a2d; 
+    --green-mid: #3d8b3d; 
+    --green-light: #c8e6c8;
+    --green-bg: #e8f5e8; 
+    --sidebar-bg: #c5e0c5; 
+    --white: #ffffff;
+    --text-dark: #1a1a1a; 
+    --text-mid: #555; 
+    --text-light: #888;
+    --red: #c0392b; 
+    --blue: #2e6e99; 
+    --radius: 16px; 
+    --radius-sm: 10px;
+    --card-shadow: 0 2px 8px rgba(45,106,45,0.10), 0 0 0 1.5px rgba(45,106,45,0.09);
+    --card-hover-shadow: 0 6px 20px rgba(45,106,45,0.16), 0 0 0 2px rgba(61,139,61,0.18);
+    --radius-pill: 999px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--green-bg);
+    color: var(--text-dark);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+}
+
+/* ==========================================================================
+   GLOBAL HEADER / TOPBAR 
+   ========================================================================== */
+.app-header {
+    background: var(--green-dark);
+    width: 100%;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    z-index: 1000;
+}
+
+/* ==========================================================================
+   HALAMAN UTAMA (INDEX SCREEN BUTTON & TEXT)
+   ========================================================================== */
+.welcome-container {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.welcome-center-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 82px;
+    font-weight: 400; 
+    color: var(--green-dark);
+    margin-bottom: 2px;
+    letter-spacing: -1px;
+}
+
+.welcome-tagline {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 24px;
+    color: var(--green-mid);
+    font-weight: 500;
+    margin-bottom: 40px;
+}
+
+.btn-start {
+    display: inline-block;
+    background-color: var(--white);
+    color: var(--text-dark);
+    border: 1.5px solid #707070;
+    padding: 12px 55px;
+    border-radius: var(--radius-pill);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.06);
+    transition: all 0.18s ease;
+    cursor: pointer;
+}
+
+.btn-start:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--card-hover-shadow);
+}
+
+/* ==========================================================================
+   (Login, Register, Forgot)
+   ========================================================================== */
+.auth-wrapper {
+    width: 100%;
+    max-width: 520px;
+    padding: 20px;
+    margin-top: 60px; 
+}
+
+.auth-card {
+    background: var(--white);
+    border-radius: var(--radius); 
+    padding: 35px 30px;
+    box-shadow: var(--card-shadow); 
+    border: 1.5px solid rgba(45,106,45,0.08);
+    width: 100%;
+}
+
+.auth-title {
+    font-family: 'DM Serif Display', serif;
+    color: var(--green-dark);
+    text-align: center;
+    font-size: 36px;
+    font-weight: 400;
+    margin-bottom: 25px;
+}
+
+/* Form Fields & Controls */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--text-mid);
+    padding-left: 10px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 20px;
+    border: 1.5px solid #ddd;
+    background-color: #f8fbf8; 
+    border-radius: var(--radius-pill); 
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text-dark);
+    outline: none;
+    transition: all 0.15s ease;
+}
+
+.form-control:focus {
+    border-color: var(--green-mid);
+    background-color: var(--white);
+}
+
+/* Utilities (Options, Links & Footer) */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    margin-bottom: 25px;
+    padding: 0 5px;
+    color: var(--text-mid);
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.forgot-link, .switch-link {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-mid);
+    text-decoration: none;
+}
+
+.forgot-link:hover, .switch-link strong:hover {
+    text-decoration: underline;
+    color: var(--green-dark);
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 25px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text-mid);
+}
+
+/* Buttons System */
+.btn-submit {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: var(--radius-pill);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: center;
+    text-decoration: none;
+}
+
+.btn-submit:active {
+    transform: scale(0.98);
+}
+
+/* Varian Aksi Tombol */
+.btn-grey-passive {
+    background-color: #e0e0e0;
+    color: #555;
+}
+
+.btn-green-active {
+    background-color: var(--green-dark);
+    color: var(--white);
+}
+
+.btn-green-active:hover {
+    opacity: 0.88;
+}
+
+.btn-dark-active {
+    background-color: #162E16; 
+    color: var(--white);
+}
+
+/* ==========================================================================
+   ERROR STATE STYLING
+   ========================================================================== */
+.error-box {
+    background-color: #fde8e8; 
+    border: 1.5px solid var(--red);
+    color: var(--red);
+    border-radius: var(--radius-pill);
+    padding: 10px 20px;
+    text-align: center;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+/* ==========================================================================
+   RESPONSIVITAS MEDIA QUERIES
+   ========================================================================== */
+@media (max-width: 576px) {
+    .auth-card { padding: 25px 20px; }
+    .app-header { padding: 12px 16px; }
+    .welcome-center-logo { font-size: 54px; }
+    .welcome-tagline { font-size: 18px; }
+    .btn-start { font-size: 18px; padding: 10px 40px; }
+}
