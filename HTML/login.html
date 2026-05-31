@@ -1,1 +1,69 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshTrack - Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+    <header class="app-header">
+    <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 26px; line-height: 1;">🌿</span>
+        <span style="font-weight: 700; font-size: 24px; color: white;">FreshTrack</span>
+    </div>
+</header>
+
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <h2 class="auth-title" id="page-title">Login to FreshTrack</h2>
+            
+            <div id="error-container"></div>
+
+            <form id="login-form" onsubmit="triggerErrorState(event)">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="form-control" required>
+                </div>
+                
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox"> Remember Me
+                    </label>
+                    <a href="forgot-password.html" class="forgot-link">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" id="btn-login" class="btn-submit btn-green-active">Login</button>
+            </form>
+            
+            <div class="auth-footer">
+                <span class="switch-link">Don't have an account? <a href="register.html"><strong>Sign Up &gt;</strong></a></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi simulasi untuk mengubah halaman dari Normal ke Error State saat tombol ditekan
+        function triggerErrorState(e) {
+            e.preventDefault();
+            
+            // 1. Menambahkan Box Notifikasi Merah di atas form
+            const errorContainer = document.getElementById('error-container');
+            errorContainer.innerHTML = '<div class="error-box">Invalid email or password!</div>';
+            
+            // 2. Mengubah warna tombol login utama menjadi abu-abu pasif sesuai mockup gambar 3 & 4
+            const loginButton = document.getElementById('btn-login');
+            loginButton.className = 'btn-submit btn-grey-passive';
+            loginButton.type = 'button'; // Ubah agar tidak submit berulang kali saat demo
+            
+            // Mengosongkan value form untuk mensimulasikan kegagalan login
+            document.getElementById('password').value = '';
+        }
+    </script>
+</body>
+</html>
