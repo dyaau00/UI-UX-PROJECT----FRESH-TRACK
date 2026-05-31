@@ -1,5 +1,4 @@
 //  FreshTrack — app.js
-
 // ── STATE ──────────────────────────────────────────────────
 const state = {
   currentPage: 'categories',
