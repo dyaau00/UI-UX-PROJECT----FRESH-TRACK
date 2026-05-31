@@ -1,1 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshTrack - Create Account</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+    <header class="app-header">
+    <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 26px; line-height: 1;">🌿</span>
+        <span style="font-weight: 700; font-size: 24px; color: white;">FreshTrack</span>
+    </div>
+</header>
+
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <h2 class="auth-title" style="font-size: 36px; margin-bottom: 30px;">Create Account</h2>
+            
+            <form onsubmit="event.preventDefault(); window.location.href='login.html';">
+                <div class="form-group">
+                    <label for="reg-name">Full Name</label>
+                    <input type="text" id="reg-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-email">Email</label>
+                    <input type="email" id="reg-email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-password">Password</label>
+                    <input type="password" id="reg-password" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-confirm">Confirm Password</label>
+                    <input type="password" id="reg-confirm" class="form-control" required>
+                </div>
+                
+                <button type="submit" class="btn-submit btn-dark-active" style="margin-top: 15px; font-size: 16px; padding: 12px;">Sign Up</button>
+            </form>
+            
+            <div class="auth-footer" style="color: var(--text-dark);">
+                Already have an account? <a href="login.html" class="switch-link"><strong>Login</strong></a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
