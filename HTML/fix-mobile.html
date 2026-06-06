@@ -1,1 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>FreshTrack</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --green-dark:  #2d6a2d;
+  --green-mid:   #3d8b3d;
+  --green-light: #c8e6c8;
+  --green-bg:    #eef6ee;
+  --white:       #ffffff;
+  --text-dark:   #1a1a1a;
+  --text-mid:    #555;
+  --text-light:  #999;
+  --red:         #c0392b;
+  --red-light:   #fde8e8;
+  --blue:        #2e6e99;
+  --radius:      18px;
+  --radius-sm:   12px;
+  --nav-h:       68px;
+  --header-h:    60px;
+  --card-shadow: 0 2px 12px rgba(45,106,45,0.10), 0 0 0 1.5px rgba(45,106,45,0.08);
+  --card-hover:   0 6px 24px rgba(45,106,45,0.16), 0 0 0 2px rgba(61,139,61,0.18);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{width:100%;height:100%;overflow:hidden;background:#1a2e1a;}
+body{font-family:'DM Sans',sans-serif;color:var(--text-dark);}
 
+/* ── PHONE SHELL ── */
+.shell{
+  width:100%;max-width:420px;height:100vh;max-height:900px;
+  margin:0 auto;position:relative;
+  background:var(--green-bg);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  box-shadow:0 0 60px rgba(0,0,0,0.5);
+}
+@media(max-width:480px){
+  html,body{background:var(--green-bg);}
+  .shell{max-width:100%;height:100vh;max-height:none;box-shadow:none;}
+}
+
+/* ── AUTH & LANDING STYLES ── */
+.auth-bg {
+  background: linear-gradient(180deg, var(--green-dark) 0%, #1e461e 100%);
+  height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 30px; color: #fff;
+  overflow-y: auto;
+}
+.landing-logo { font-size: 64px; text-align: center; margin-bottom: 10px; }
+.landing-title { font-family: 'DM Serif Display', serif; font-size: 36px; text-align: center; margin-bottom: 8px; }
+.landing-tag { font-size: 14px; text-align: center; opacity: 0.85; margin-bottom: 40px; line-height: 1.4; }
+.auth-title { font-family: 'DM Serif Display', serif; font-size: 28px; margin-bottom: 6px; text-align: center; }
+.auth-sub { font-size: 14px; opacity: 0.8; margin-bottom: 24px; text-align: center; }
+.auth-switch { text-align: center; font-size: 13px; margin-top: 16px; opacity: 0.9; cursor: pointer; }
+.auth-switch strong { text-decoration: underline; color: var(--green-light); }
+
+/* Row untuk Remember Me & Forgot Password */
+.auth-meta-row {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 13px; margin-top: -4px; margin-bottom: 24px; user-select: none;
+}
+.remember-me-label { display: flex; align-items: center; gap: 6px; cursor: pointer; opacity: 0.9; }
+.remember-me-label input {
+  accent-color: var(--green-light); width: 15px; height: 15px; cursor: pointer;
+}
+.forgot-pwd-link { color: rgba(255,255,255,0.9); text-decoration: none; cursor: pointer; }
+.forgot-pwd-link:hover { text-decoration: underline; color: var(--green-light); }
+
+/* Inner container card agar menyerupai screenshot web mockup */
+.auth-card-box {
+  background: var(--white);
+  padding: 24px 20px;
+  border-radius: var(--radius);
+  color: var(--text-dark);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  margin-bottom: 16px;
+}
+.auth-card-box .form-label { color: var(--text-dark) !important; }
+
+/* Error Message Box */
+.error-msg-box {
+  background: var(--red-light); color: var(--red); border-radius: var(--radius-sm);
+  padding: 10px 14px; font-size: 13px; font-weight: 500; margin-bottom: 16px;
+  display: none; align-items: center; gap: 8px; animation: shake 0.3s ease;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+/* ── HEADER ── */
+.header{
+  background:var(--green-dark); height:var(--header-h);
+  display:none; align-items:center; padding:0 16px; gap:10px;
+  flex-shrink:0; position:relative; z-index:10;
+}
+.header-back{
+  background:rgba(255,255,255,0.18); border:none; border-radius:50%;
+  width:36px; height:36px; display:flex; align-items:center; justify-content:center;
+  color:#fff; font-size:18px; cursor:pointer; flex-shrink:0; transition:background 0.15s;
+}
+.header-back:active{background:rgba(255,255,255,0.3);}
+.header-logo{display:flex;align-items:center;gap:7px;flex-shrink:0;}
+.header-logo-icon{font-size:22px;}
+.header-logo-text{color:#fff;font-weight:700;font-size:18px;letter-spacing:-0.3px;}
+.header-title{color:#fff;font-family:'DM Serif Display',serif;font-size:17px;flex:1;}
+.header-search{
+  flex:1; background:rgba(255,255,255,0.18); border:none; border-radius:999px;
+  padding:8px 14px; color:#fff; font-family:'DM Sans',sans-serif; font-size:13px; outline:none;
+}
+.header-search::placeholder{color:rgba(255,255,255,0.65);}
+
+/* ── SCROLL BODY ── */
+.scroll-body{
+  flex:1; overflow-y:auto; overflow-x:hidden;
+  padding:0; -webkit-overflow-scrolling:touch;
+}
+.scroll-body::-webkit-scrollbar{display:none;}
+.p-main { padding: 16px 14px calc(var(--nav-h) + 16px) !important; }
+
+/* ── PAGES ── */
+.page{display:none; height:100%;}
+.page.active{display:block;}
+.page-anim { animation:fadeUp 0.22s ease; }
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+
+/* ── COMPONENTS ── */
+.section-title{ font-family:'DM Serif Display',serif; font-size:22px; color:var(--green-dark); margin-bottom:14px; }
+.card-list{display:flex;flex-direction:column;gap:10px;}
+.card-item{
+  display:flex;align-items:center;gap:14px; background:var(--white);border-radius:var(--radius);
+  padding:14px 16px;cursor:pointer; box-shadow:var(--card-shadow); border:1.5px solid rgba(45,106,45,0.07);
+  transition:transform 0.12s,box-shadow 0.15s; -webkit-user-select:none;user-select:none;
+}
+.card-item:active{transform:scale(0.98);box-shadow:var(--card-hover);}
+.card-emoji{font-size:28px;flex-shrink:0;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:12px;}
+.card-label{font-size:15px;font-weight:600;line-height:1.3;}
+.card-sub{font-size:12px;color:var(--text-light);margin-top:2px;}
+.card-arrow{margin-left:auto;color:#ccc;font-size:16px;flex-shrink:0;}
+
+.badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;margin-left:5px;vertical-align:middle;}
+.badge-urgent{background:#fde8e8;color:#c0392b;}
+.badge-warn{background:#fff3cd;color:#856404;}
+.badge-ok{background:#d4edda;color:#155724;}
+
+.detail-hero{
+  background:var(--white);border-radius:var(--radius); padding:18px 16px;margin-bottom:12px;
+  box-shadow:var(--card-shadow); display:flex;align-items:center;gap:14px;
+}
+.form-card{background:var(--white);border-radius:var(--radius);padding:16px;box-shadow:var(--card-shadow);margin-bottom:12px;}
+.form-field{margin-bottom:12px;}
+.form-label{font-size:12px;font-weight:600;color:var(--text-mid);margin-bottom:5px;display:block;text-transform:uppercase;letter-spacing:0.04em;}
+.form-input,.form-select{
+  width:100%;padding:12px 14px; border-radius:var(--radius-sm);border:1.5px solid #e0e0e0;
+  background:#f8fbf8;font-family:'DM Sans',sans-serif;font-size:15px; outline:none;transition:border-color 0.15s;
+}
+.form-input:focus,.form-select:focus{border-color:var(--green-mid);background:#fff;}
+.form-auth-input { background: #f1f5f1; border: 1.5px solid #dcdfdc; color: var(--text-dark); }
+.form-auth-input:focus { border-color: var(--green-mid); background: #fff; }
+
+.select-wrap{position:relative;}
+.select-wrap::after{content:'▾';position:absolute;right:14px;top:50%;transform:translateY(-50%);pointer-events:none;color:#888;font-size:14px;}
+.qty-available{ background:linear-gradient(135deg,#e8f8ee,#d0f0d8); border-radius:var(--radius-sm);padding:12px 14px; font-size:14px;color:var(--green-dark);font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px; }
+
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;}
+.btn{ flex:1;min-width:80px;padding:13px 10px; border-radius:var(--radius-sm);border:none; font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700; cursor:pointer;transition:opacity 0.15s,transform 0.1s;text-align:center; }
+.btn:active{transform:scale(0.96);}
+.btn-green{background:var(--green-dark);color:#fff;}
+.btn-light{background:var(--white);color:var(--green-dark);}
+.btn-red{background:var(--red);color:#fff;}
+.btn-blue{background:var(--blue);color:#fff;}
+.btn-gray{background:#e8e8e8;color:#555;}
+.btn-full{width:100%;padding:15px;border-radius:var(--radius-sm);border:none;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:opacity 0.15s,transform 0.1s;margin-bottom:8px;}
+.btn-full:active{transform:scale(0.98);}
+
+/* ── DASHBOARD & STATS ── */
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.dash-card{border-radius:var(--radius);padding:16px 14px;color:#fff;font-weight:700;box-shadow:0 4px 16px rgba(0,0,0,0.12);}
+.dash-card .ico{font-size:22px;margin-bottom:6px;}
+.dash-card .num{font-size:28px;font-family:'DM Serif Display',serif;line-height:1;}
+.dash-card .lbl{font-size:11px;opacity:0.88;margin-top:3px;}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.stats-mini{background:var(--white);border-radius:var(--radius);padding:14px;box-shadow:var(--card-shadow);}
+.stats-mini .sm-ico{font-size:20px;margin-bottom:4px;}
+.stats-mini .sm-val{font-size:26px;font-weight:700;font-family:'DM Serif Display',serif;}
+.stats-mini .sm-lbl{font-size:11px;color:var(--text-light);margin-top:2px;}
+.chart-card{background:var(--white);border-radius:var(--radius);padding:16px;box-shadow:var(--card-shadow);margin-bottom:12px;}
+.chart-card-title覆{font-size:13px;font-weight:700;color:var(--green-dark);margin-bottom:12px;}
+.stat-bar-wrap{margin:7px 0;}
+.stat-bar-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;}
+.stat-bar-track{background:#eef0ee;border-radius:999px;height:8px;overflow:hidden;}
+.stat-bar-fill{height:100%;border-radius:999px;transition:width 0.6s ease;}
+
+/* ── PROFILE & PICKER ── */
+.profile-card{background:var(--white);border-radius:var(--radius);padding:16px;box-shadow:var(--card-shadow);margin-bottom:12px;}
+.profile-title{font-size:14px;font-weight:700;color:var(--green-dark);margin-bottom:12px;}
+.profile-info-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:14px;}
+.profile-info-row:last-child{border-bottom:none;}
+.profile-info-key{color:var(--text-mid);font-weight:500;}
+.profile-info-val{font-weight:600;text-align:right;}
+
+.emoji-picker-wrap{position:relative;}
+.emoji-display{width:100%;padding:12px 14px;border-radius:var(--radius-sm);border:1.5px solid #e0e0e0;background:#f8fbf8;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:14px;user-select:none;}
+.emoji-display .sel-emoji{font-size:24px;}
+.emoji-display .sel-arrow{margin-left:auto;color:#888;font-size:12px;}
+.emoji-dropdown{display:none;position:absolute;bottom:calc(100% + 6px);left:0;right:0;background:#fff;border:1.5px solid #ddd;border-radius:var(--radius);box-shadow:0 -8px 32px rgba(0,0,0,0.13);z-index:300;max-height:260px;overflow-y:auto;padding:10px;}
+.emoji-dropdown.open{display:block;}
+.emoji-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(40px,1fr));gap:3px;}
+.emoji-btn{font-size:22px;padding:6px 4px;border-radius:8px;border:none;background:none;cursor:pointer;text-align:center;}
+.emoji-btn:active{background:var(--green-light);}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav{
+  height:var(--nav-h);background:var(--white); border-top:1.5px solid rgba(45,106,45,0.1);
+  display:none; align-items:stretch; flex-shrink:0;position:relative; z-index:20;
+  box-shadow:0 -4px 20px rgba(45,106,45,0.08);
+}
+.nav-item{ flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center; gap:3px;border:none;background:none;cursor:pointer; }
+.nav-item .n-ico{font-size:22px;line-height:1;}
+.nav-item .n-lbl{font-size:10px;font-weight:600;color:var(--text-light);}
+.nav-item.active .n-lbl{color:var(--green-dark);}
+.nav-item.active .n-ico{filter:drop-shadow(0 0 2px rgba(45,106,45,0.4));}
+.nav-active-bar{ position:absolute;top:0;height:3px;background:var(--green-dark);width:25%;transition:left 0.25s cubic-bezier(.4,0,.2,1); }
+
+/* ── FAB & TOAST ── */
+.fab{
+  position:absolute;right:16px;bottom:calc(var(--nav-h) + 14px); width:52px;height:52px;border-radius:50%;
+  background:var(--green-dark);color:#fff;border:none;font-size:26px;cursor:pointer;
+  box-shadow:0 4px 20px rgba(45,106,45,0.35); display:none;align-items:center;justify-content:center;z-index:15;
+}
+.fab:active{transform:scale(0.92);}
+.toast{
+  position:absolute;bottom:calc(var(--nav-h) + 12px);left:50%; transform:translateX(-50%) translateY(20px);
+  background:rgba(30,60,30,0.95);color:#fff; padding:10px 22px;border-radius:999px;
+  font-size:13px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,0.18);
+  z-index:999;opacity:0;transition:opacity 0.25s,transform 0.25s;white-space:nowrap;pointer-events:none;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.empty{text-align:center;padding:40px 20px;color:var(--text-light);}
+.empty .empty-ico{font-size:48px;margin-bottom:12px;}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="header" id="app-header">
+    <div class="header-logo" id="header-logo">
+      <span class="header-logo-icon">🌿</span>
+      <span class="header-logo-text">FreshTrack</span>
+    </div>
+    <input class="header-search" id="searchInput" type="text" placeholder="🔍  Search food..." oninput="handleSearch(this.value)" />
+  </div>
+
+  <div class="scroll-body" id="scroll-body">
+
+    <div class="page active" id="page-landing">
+      <div class="auth-bg">
+        <div class="landing-logo">🌿</div>
+        <div class="landing-title">FreshTrack</div>
+        <div class="landing-tag">Track your food freshness easily, minimize waste, and organize your smart kitchen effortlessly.</div>
+        <button class="btn-full btn-light" onclick="navigate('login')">Get Started</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-login">
+      <div class="auth-bg">
+        <div class="auth-title" style="color:#fff; margin-bottom:4px;">Login to FreshTrack</div>
+        <div class="auth-sub" style="color:rgba(255,255,255,0.75);">Welcome back! Let's manage your food inventory.</div>
+        
+        <div class="auth-card-box">
+          <div class="error-msg-box" id="login-error-box">
+            <span>⚠️</span><span id="login-error-txt">Invalid email or password.</span>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Email</label>
+            <input class="form-input form-auth-input" type="email" id="login-email" placeholder="your@email.com" value="revanaalshea@gmail.com" />
+          </div>
+          <div class="form-field" style="margin-bottom:14px;">
+            <label class="form-label">Password</label>
+            <input class="form-input form-auth-input" type="password" id="login-password" placeholder="••••••••" value="password123" />
+          </div>
+
+          <div class="auth-meta-row" style="color: var(--text-mid);">
+            <label class="remember-me-label">
+              <input type="checkbox" id="login-remember" checked />
+              <span>Remember Me</span>
+            </label>
+            <span class="forgot-pwd-link" style="color: var(--green-dark); font-weight:600;" onclick="navigate('forgot')">Forgot Password?</span>
+          </div>
+
+          <button class="btn-full btn-green" style="margin-bottom:0;" onclick="validateAndLogin()">Login</button>
+        </div>
+
+        <div class="auth-switch" onclick="navigate('register')">Don't have an account? <strong>Sign Up</strong></div>
+      </div>
+    </div>
+
+    <div class="page" id="page-forgot">
+      <div class="auth-bg">
+        <div class="auth-title" style="color:#fff; margin-bottom:4px;">Forgot Password?</div>
+        <div class="auth-sub" style="color:rgba(255,255,255,0.75);">Enter your email to reset your password</div>
+
+        <div class="auth-card-box">
+          <div class="error-msg-box" id="forgot-error-box">
+            <span>⚠️</span><span id="forgot-error-txt">Email not found.</span>
+          </div>
+
+          <div class="form-field" style="margin-bottom:20px;">
+            <label class="form-label">Email</label>
+            <input class="form-input form-auth-input" type="email" id="forgot-email" placeholder="your@email.com" />
+          </div>
+
+          <button class="btn-full btn-green" style="margin-bottom:12px;" onclick="validateAndSendReset()">Send Reset Link</button>
+          <div style="text-align:center; font-size:13px; font-weight:600;">
+            <span style="color: var(--green-dark); cursor:pointer;" onclick="navigate('login')">&lt; Back to Login</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-register">
+      <div class="auth-bg">
+        <div class="auth-title" style="color:#fff; margin-bottom:4px;">Create Account</div>
+        <div class="auth-sub" style="color:rgba(255,255,255,0.75);">Join us to track your food inventory</div>
+        
+        <div class="auth-card-box">
+          <div class="error-msg-box" id="register-error-box">
+            <span>⚠️</span><span id="register-error-txt">Please complete all data.</span>
+          </div>
+
+          <div class="form-field">
+            <label class="form-label">Full Name</label>
+            <input class="form-input form-auth-input" type="text" id="reg-name" placeholder="John Doe" />
+          </div>
+          <div class="form-field">
+            <label class="form-label">Email</label>
+            <input class="form-input form-auth-input" type="email" id="reg-email" placeholder="your@email.com" />
+          </div>
+          <div class="form-field">
+            <label class="form-label">Password</label>
+            <input class="form-input form-auth-input" type="password" id="reg-password" placeholder="••••••••" />
+          </div>
+          <div class="form-field" style="margin-bottom:20px;">
+            <label class="form-label">Confirm Password</label>
+            <input class="form-input form-auth-input" type="password" id="reg-confirm" placeholder="••••••••" />
+          </div>
+
+          <button class="btn-full btn-green" style="margin-bottom:0;" onclick="validateAndRegister()">Sign Up</button>
+        </div>
+
+        <div class="auth-switch" onclick="navigate('login')">Already have an account? <strong>Login</strong></div>
+      </div>
+    </div>
+
+    <div class="page page-anim" id="page-categories">
+      <div class="section-title">Categories</div>
+      <div class="card-list" id="categories-list"></div>
+    </div>
+
+    <div class="page page-anim" id="page-foodlist">
+      <div class="section-title" id="foodlist-title"></div>
+      <div class="card-list" id="foodlist-items"></div>
+    </div>
+
+    <div class="page page-anim" id="page-fooddetail">
+      <div class="detail-hero">
+        <span id="detail-emoji" style="font-size:48px;line-height:1"></span>
+        <div>
+          <div id="detail-name" style="font-family:'DM Serif Display',serif;font-size:20px;color:var(--green-dark);"></div>
+          <div id="detail-category" style="font-size:13px;color:var(--text-mid);margin-top:3px;"></div>
+        </div>
+      </div>
+      <div class="form-card">
+        <div class="qty-available"><span>📦</span><span>Available: <strong id="detail-qty"></strong> items</span></div>
+        <div class="form-field">
+          <label class="form-label">Quantity to Consume / Discard</label>
+          <input class="form-input" type="number" id="detail-qty-input" min="1" placeholder="Enter quantity..." />
+        </div>
+        <div class="form-field">
+          <label class="form-label">Expiry Date</label>
+          <input class="form-input" type="date" id="detail-expiry-input" />
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-green" onclick="consumeFood()">✓ Consumed</button>
+          <button class="btn btn-red"   onclick="discardFood()">🗑 Discard</button>
+          <button class="btn btn-blue"  onclick="openEditFood()">✏ Edit</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="page page-anim" id="page-addfood">
+      <div class="section-title">Add Food</div>
+      <div class="form-card">
+        <div class="form-field"><label class="form-label">Food Name</label><input class="form-input" type="text" id="add-name" placeholder="e.g. Strawberries" /></div>
+        <div class="form-field">
+          <label class="form-label">Category</label>
+          <div class="select-wrap">
+            <select class="form-select" id="add-category">
+              <option value="">Select category...</option>
+              <option>Fruits &amp; Vegetables</option>
+              <option>Drinks</option>
+              <option>Dairy</option>
+              <option>Frozen</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-field"><label class="form-label">Quantity</label><input class="form-input" type="number" id="add-qty" min="1" placeholder="Enter quantity..." /></div>
+        <div class="form-field"><label class="form-label">Expires in (days)</label><input class="form-input" type="number" id="add-expires" min="1" placeholder="e.g. 5" /></div>
+        <div class="form-field">
+          <label class="form-label">Icon</label>
+          <div class="emoji-picker-wrap" id="picker-add">
+            <div class="emoji-display" onclick="togglePicker('add')">
+              <span class="sel-emoji" id="add-icon-display">🍎</span>
+              <span style="color:var(--text-mid);font-size:14px; margin-left:8px;">Choose icon</span>
+              <span class="sel-arrow">▲</span>
+            </div>
+            <div class="emoji-dropdown" id="add-icon-dropdown"></div>
+          </div>
+          <input type="hidden" id="add-icon" value="🍎" />
+        </div>
+        <button class="btn-full btn-green" onclick="saveNewFood()">Save Food</button>
+        <button class="btn-full btn-gray"  onclick="backToFoodList()">Cancel</button>
+      </div>
+    </div>
+
+    <div class="page page-anim" id="page-editfood">
+      <div class="section-title">Edit Food</div>
+      <div class="form-card">
+        <div class="form-field"><label class="form-label">Food Name</label><input class="form-input" type="text" id="edit-name" /></div>
+        <div class="form-field">
+          <label class="form-label">Category</label>
+          <div id="edit-category-display" style="padding:12px 14px;border-radius:var(--radius-sm);border:1.5px solid #e0e0e0;background:#f3f7f3;font-size:15px;font-weight:600;color:var(--green-dark);"></div>
+          <input type="hidden" id="edit-category" />
+        </div>
+        <div class="form-field"><label class="form-label">Quantity</label><input class="form-input" type="number" id="edit-qty" min="1" /></div>
+        <div class="form-field"><label class="form-label">Expires in (days)</label><input class="form-input" type="number" id="edit-expires" min="1" /></div>
+        <div class="form-field">
+          <label class="form-label">Icon</label>
+          <div class="emoji-picker-wrap" id="picker-edit">
+            <div class="emoji-display" onclick="togglePicker('edit')">
+              <span class="sel-emoji" id="edit-icon-display">🍎</span>
+              <span style="color:var(--text-mid);font-size:14px; margin-left:8px;">Choose icon</span>
+              <span class="sel-arrow">▲</span>
+            </div>
+            <div class="emoji-dropdown" id="edit-icon-dropdown"></div>
+          </div>
+          <input type="hidden" id="edit-icon" value="🍎" />
+        </div>
+        <button class="btn-full btn-green" onclick="saveEditFood()">Save Changes</button>
+        <button class="btn-full btn-gray"  onclick="navigate('fooddetail')">Cancel</button>
+      </div>
+    </div>
+
+    <div class="page page-anim" id="page-dashboard">
+      <div class="section-title">Dashboard</div>
+      <div id="dashboard-content"></div>
+    </div>
+
+    <div class="page page-anim" id="page-statistics">
+      <div class="section-title">Statistics</div>
+      <div id="statistics-content"></div>
+    </div>
+
+    <div class="page page-anim" id="page-account">
+      <div class="section-title">Account</div>
+      <div class="profile-card">
+        <div class="profile-title">👤 Profile Information</div>
+        <div class="profile-info-row"><span class="profile-info-key">Name</span><span class="profile-info-val" id="acc-name">Revana Alshea</span></div>
+        <div class="profile-info-row"><span class="profile-info-key">Email</span><span class="profile-info-val" id="acc-email">revanaalshea@gmail.com</span></div>
+        <div class="profile-info-row"><span class="profile-info-key">Role</span><span class="profile-info-val">User</span></div>
+        <button class="btn-full btn-green" style="margin-top:14px;" onclick="navigate('editprofile')">Edit Profile</button>
+      </div>
+      <div class="profile-card">
+        <div class="profile-title">📈 Activity Summary</div>
+        <div id="acc-summary"></div>
+        <button class="btn-full btn-red" style="margin-top:14px;background:#8b2020;" onclick="logoutApp()">Logout</button>
+      </div>
+    </div>
+
+    <div class="page page-anim" id="page-editprofile">
+      <div class="section-title">Edit Profile</div>
+      <div class="form-card">
+        <div class="form-field"><label class="form-label">Name</label><input class="form-input" type="text" id="ep-name" value="Revana Alshea" /></div>
+        <div class="form-field"><label class="form-label">Email</label><input class="form-input" type="email" id="ep-email" value="revanaalshea@gmail.com" /></div>
+        <button class="btn-full btn-green" onclick="saveProfile()">Save</button>
+        <button class="btn-full btn-gray"  onclick="navigate('account')">Cancel</button>
+      </div>
+    </div>
+
+  </div><button class="fab" id="fab" onclick="openAddFood()">+</button>
+
+  <nav class="bottom-nav" id="app-nav">
+    <div class="nav-active-bar" id="nav-bar"></div>
+    <button class="nav-item" id="nav-dashboard"   onclick="navigate('dashboard')"><span class="n-ico">🏠</span><span class="n-lbl">Dashboard</span></button>
+    <button class="nav-item active" id="nav-categories" onclick="navigate('categories')"><span class="n-ico">🗂️</span><span class="n-lbl">Categories</span></button>
+    <button class="nav-item" id="nav-statistics"  onclick="navigate('statistics')"><span class="n-ico">📊</span><span class="n-lbl">Statistics</span></button>
+    <button class="nav-item" id="nav-account"     onclick="navigate('account')"><span class="n-ico">👤</span><span class="n-lbl">Account</span></button>
+  </nav>
+
+  <div class="toast" id="toast"></div>
+</div><script>
+// ── STATE ──
+const state = {
+  currentPage:'landing', currentCategory:null, currentFoodId:null,
+  consumed:12, discarded:2, totalAdded:0, nextId:17,
+  profile:{ name:'Revana Alshea', email:'revanaalshea@gmail.com' },
+  foods:[
+    {id:1, name:'Apples',        emoji:'🍎', category:'Fruits & Vegetables', qty:5, expires:3},
+    {id:2, name:'Bananas',       emoji:'🍌', category:'Fruits & Vegetables', qty:4, expires:1},
+    {id:3, name:'Carrot',        emoji:'🥕', category:'Fruits & Vegetables', qty:6, expires:4},
+    {id:4, name:'Tomato',        emoji:'🍅', category:'Fruits & Vegetables', qty:4, expires:7},
+    {id:5, name:'Avocado Juice', emoji:'🥑', category:'Drinks',              qty:4, expires:4},
+    {id:6, name:'Lemonade',      emoji:'🍋', category:'Drinks',              qty:3, expires:3},
+    {id:7, name:'Fresh Coffee',  emoji:'☕', category:'Drinks',              qty:6, expires:2},
+    {id:8, name:'Milkshake',     emoji:'🥤', category:'Drinks',              qty:5, expires:4},
+    {id:9, name:'Milk',          emoji:'🥛', category:'Dairy',               qty:4, expires:1},
+    {id:10,name:'Cheese',        emoji:'🧀', category:'Dairy',               qty:3, expires:3},
+    {id:11,name:'Yogurt',        emoji:'🫙', category:'Dairy',               qty:2, expires:1},
+    {id:12,name:'Ice Cream',     emoji:'🍦', category:'Dairy',               qty:5, expires:8},
+    {id:13,name:'Frozen Pizza',  emoji:'🍕', category:'Frozen',              qty:2, expires:12},
+    {id:14,name:'Frozen Nuggets',emoji:'🍱', category:'Frozen',              qty:3, expires:14},
+    {id:15,name:'Frozen Peas',   emoji:'🫛', category:'Frozen',              qty:5, expires:10},
+    {id:16,name:'Frozen Chicken',emoji:'🍗', category:'Frozen',              qty:2, expires:2},
+  ]
+};
+state.totalAdded = state.foods.reduce((s,f)=>s+f.qty,0);
+
+const CATEGORIES = [
+  {name:'Fruits & Vegetables', emoji:'🍏', bg:'linear-gradient(135deg,#e8f8ee,#d0f0d8)'},
+  {name:'Drinks',              emoji:'🧃', bg:'linear-gradient(135deg,#e8f4fb,#cce8f8)'},
+  {name:'Dairy',               emoji:'🥛', bg:'linear-gradient(135deg,#fef9ec,#fdefc8)'},
+  {name:'Frozen',              emoji:'❄️',  bg:'linear-gradient(135deg,#eef4fb,#d8eaf8)'},
+];
+
+const EMOJI_LIST = ['🍎','🍌','🥕','🍅','🥑','🍋','☕','🥤','🥛','🧀','🫙','🍦','🍕','🍱','🫛','🍗'];
+const NAV_ORDER = ['dashboard','categories','statistics','account'];
+
+// ── AUTH VALIDATION & LOGIC ──
+function validateAndLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-password').value;
+  const errorBox = document.getElementById('login-error-box');
+  const errorTxt = document.getElementById('login-error-txt');
+
+  errorBox.style.display = 'none';
+
+  if (!email || !pass) {
+    errorTxt.textContent = "Email and Password cannot be empty.";
+    errorBox.style.display = 'flex';
+    return;
+  }
+  if (!email.includes('@')) {
+    errorTxt.textContent = "Please include an '@' in the email address. '" + email + "' is missing an '@'.";
+    errorBox.style.display = 'flex';
+    return;
+  }
+  if (pass.length < 6) {
+    errorTxt.textContent = "Password must be at least 6 characters.";
+    errorBox.style.display = 'flex';
+    return;
+  }
+  
+  if (email === "revanaalshea@gmail.com" && pass === "password123") {
+    showToast('Login successful!');
+    setTimeout(() => { navigate('categories'); }, 600);
+  } else {
+    errorTxt.textContent = "Incorrect email or password. Please try again.";
+    errorBox.style.display = 'flex';
+  }
+}
+
+function validateAndRegister() {
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const pass = document.getElementById('reg-password').value;
+  const confirm = document.getElementById('reg-confirm').value;
+  const errorBox = document.getElementById('register-error-box');
+  const errorTxt = document.getElementById('register-error-txt');
+
+  errorBox.style.display = 'none';
+
+  if (!name || !email || !pass || !confirm) {
+    errorTxt.textContent = "All fields are required.";
+    errorBox.style.display = 'flex';
+    return;
+  }
+  if (!email.includes('@')) {
+    errorTxt.textContent = "Please include an '@' in the email address.";
+    errorBox.style.display = 'flex';
+    return;
+  }
+  if (pass.length < 6) {
+    errorTxt.textContent = "Password must be at least 6 characters.";
+    errorBox.style.display = 'flex';
+    return;
+  }
+  if (pass !== confirm) {
+    errorTxt.textContent = "Passwords do not match!";
+    errorBox.style.display = 'flex';
+    return;
+  }
+
+  state.profile.name = name;
+  state.profile.email = email;
+  
+  showToast('Account created successfully!');
+  setTimeout(() => { navigate('categories'); }, 800);
+}
+
+function validateAndSendReset() {
+  const email = document.getElementById('forgot-email').value.trim();
+  const errorBox = document.getElementById('forgot-error-box');
+  const errorTxt = document.getElementById('forgot-error-txt');
+
+  errorBox.style.display = 'none';
+
+  if (!email) {
+    errorTxt.textContent = "Please enter your email address.";
+    errorBox.style.display = 'flex';
+    return;
+  }
+  if (!email.includes('@')) {
+    errorTxt.textContent = "Please include an '@' in the email address.";
+    errorBox.style.display = 'flex';
+    return;
+  }
+
+  showToast('Reset token sent to ' + email);
+  setTimeout(() => { navigate('login'); }, 1500);
+}
+
+function logoutApp() {
+  showToast('Logged out!');
+  setTimeout(() => {
+    document.getElementById('login-error-box').style.display = 'none';
+    navigate('landing');
+  }, 500);
+}
+
+// ── CORE NAVIGATION ──
+function navigate(page) {
+  state.currentPage = page;
+  
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.getElementById('scroll-body').scrollTop = 0;
+
+  const header = document.getElementById('app-header');
+  const nav = document.getElementById('app-nav');
+  const sBody = document.getElementById('scroll-body');
+  const logo = document.getElementById('header-logo');
+  const search = document.getElementById('searchInput');
+  const backId = 'header-back-btn';
+  let existingBack = document.getElementById(backId);
+
+  // Clear existing error views when page switching
+  document.querySelectorAll('.error-msg-box').forEach(eb => eb.style.display = 'none');
+
+  if(['landing', 'login', 'register', 'forgot'].includes(page)) {
+    header.style.display = 'none';
+    nav.style.display = 'none';
+    sBody.classList.remove('p-main');
+    document.getElementById('fab').style.display = 'none';
+    return;
+  }
+
+  header.style.display = 'flex';
+  nav.style.display = 'flex';
+  sBody.classList.add('p-main');
+
+  const insideCategoryRoute = ['foodlist','fooddetail','addfood','editfood'].includes(page);
+  const inInnerLayout = insideCategoryRoute || page === 'editprofile';
+
+  if(inInnerLayout){
+    search.style.display='none';
+    if(!existingBack){
+      const b = document.createElement('button');
+      b.className='header-back'; b.id=backId; b.innerHTML='←';
+      b.onclick = ()=>{
+        if(['fooddetail','addfood'].includes(state.currentPage)) backToFoodList();
+        else if(state.currentPage==='editfood') navigate('fooddetail');
+        else if(state.currentPage==='editprofile') navigate('account');
+        else if(state.currentPage==='foodlist') navigate('categories');
+        else navigate('categories');
+      };
+      logo.before(b);
+    }
+    const titleEl = document.querySelector('.header-title') || (() => {
+      const t=document.createElement('div'); t.className='header-title'; logo.after(t); return t;
+    })();
+    logo.style.display='none';
+    const titles={foodlist:state.currentCategory||'',fooddetail:'',addfood:'Add Food',editfood:'Edit Food',editprofile:'Edit Profile'};
+    titleEl.textContent = titles[page]||'';
+    titleEl.style.display='block';
+  } else {
+    search.style.display='';
+    logo.style.display='flex';
+    if(existingBack) existingBack.remove();
+    const titleEl=document.querySelector('.header-title');
+    if(titleEl) titleEl.style.display='none';
+  }
+
+  const activeTab = insideCategoryRoute ? 'categories' : (page==='editprofile' ? 'account' : page);
+  NAV_ORDER.forEach((n,i)=>{
+    const btn=document.getElementById('nav-'+n);
+    const isActive = n === activeTab;
+    if(btn){
+      btn.classList.toggle('active', isActive);
+      if(isActive) document.getElementById('nav-bar').style.left=(i*25)+'%';
+    }
+  });
+
+  document.getElementById('fab').style.display = (page === 'foodlist') ? 'flex' : 'none';
+
+  if(page=='categories')  renderCategories();
+  if(page=='foodlist')    renderFoodList();
+  if(page=='dashboard')   renderDashboard();
+  if(page=='statistics')  renderStats();
+  if(page=='account')     renderAccount();
+}
+
+function backToFoodList(){ navigate('foodlist'); }
+
+// ── FEATURE RENDERERS ──
+function renderCategories(){
+  const el=document.getElementById('categories-list');
+  el.innerHTML=CATEGORIES.map(cat=>{
+    const foods=state.foods.filter(f=>f.category===cat.name);
+    const total=foods.reduce((s,f)=>s+f.qty,0);
+    return `<div class="card-item" onclick="openCategory('${cat.name}')" style="background:${cat.bg};">
+      <div class="card-emoji" style="background:rgba(255,255,255,0.5)">${cat.emoji}</div>
+      <div style="flex:1">
+        <div class="card-label">${cat.name}</div>
+        <div class="card-sub">${foods.length} items · ${total} units</div>
+      </div>
+      <span class="card-arrow">›</span>
+    </div>`;
+  }).join('');
+}
+
+function openCategory(catName){ state.currentCategory=catName; navigate('foodlist'); }
+
+function renderFoodList(){
+  const cat=state.currentCategory;
+  const catInfo=CATEGORIES.find(c=>c.name===cat);
+  const foods=state.foods.filter(f=>f.category===cat&&f.qty>0);
+  document.getElementById('foodlist-title').textContent=cat;
+  
+  const t=document.querySelector('.header-title');
+  if(t) t.textContent=cat;
+  const el=document.getElementById('foodlist-items');
+  if(!foods.length){
+    el.innerHTML=`<div class="empty"><div class="empty-ico">🥬</div><div class="empty-txt">No items yet!<br>Tap + to add food.</div></div>`;
+    return;
+  }
+  const bg=catInfo?catInfo.bg:'#fff';
+  el.innerHTML=foods.map(f=>`
+    <div class="card-item" onclick="openFoodDetail(${f.id})" style="background:${bg}">
+      <div class="card-emoji" style="background:rgba(255,255,255,0.5)">${f.emoji}</div>
+      <div style="flex:1">
+        <div class="card-label">${f.name} ${badge(f.expires)}</div>
+        <div class="card-sub">Count: ${f.qty} · Expires in ${f.expires}d</div>
+      </div>
+      <span class="card-arrow">›</span>
+    </div>`).join('');
+}
+
+function badge(d){
+  if(d<=1) return `<span class="badge badge-urgent">${d}d</span>`;
+  if(d<=3) return `<span class="badge badge-warn">${d}d</span>`;
+  return `<span class="badge badge-ok">${d}d</span>`;
+}
+
+function openFoodDetail(id){ state.currentFoodId=id; navigate('fooddetail'); renderFoodDetail(); }
+
+function renderFoodDetail(){
+  const f=state.foods.find(f=>f.id===state.currentFoodId); if(!f) return;
+  document.getElementById('detail-emoji').textContent=f.emoji;
+  document.getElementById('detail-name').textContent=f.name;
+  document.getElementById('detail-category').textContent='Category: '+f.category;
+  document.getElementById('detail-qty').textContent=f.qty;
+  document.getElementById('detail-qty-input').value='';
+  const d=new Date(); d.setDate(d.getDate()+f.expires);
+  document.getElementById('detail-expiry-input').value=d.toISOString().split('T')[0];
+  const t=document.querySelector('.header-title');
+  if(t) t.textContent=f.name;
+}
+
+function consumeFood(){
+  const f=state.foods.find(f=>f.id===state.currentFoodId);
+  const n=parseInt(document.getElementById('detail-qty-input').value);
+  if(!n||n<1){showToast('Enter a quantity first!');return;}
+  if(n>f.qty){showToast('Only '+f.qty+' available!');return;}
+  f.qty-=n; state.consumed+=n;
+  showToast('✓ Consumed '+n+' × '+f.name);
+  if(f.qty===0){setTimeout(()=>backToFoodList(),1200);return;}
+  renderFoodDetail();
+}
+
+function discardFood(){
+  const f=state.foods.find(f=>f.id===state.currentFoodId);
+  const n=parseInt(document.getElementById('detail-qty-input').value);
+  if(!n||n<1){showToast('Enter a quantity first!');return;}
+  if(n>f.qty){showToast('Only '+f.qty+' available!');return;}
+  f.qty-=n; state.discarded+=n;
+  showToast('🗑 Discarded '+n+' × '+f.name);
+  if(f.qty===0){setTimeout(()=>backToFoodList(),1200);return;}
+  renderFoodDetail();
+}
+
+function openAddFood(){
+  document.getElementById('add-name').value='';
+  document.getElementById('add-category').value=state.currentCategory || '';
+  document.getElementById('add-qty').value='';
+  document.getElementById('add-expires').value='';
+  navigate('addfood');
+}
+
+function saveNewFood(){
+  const name = document.getElementById('add-name').value.trim();
+  const cat = document.getElementById('add-category').value;
+  const qty = parseInt(document.getElementById('add-qty').value);
+  const exp = parseInt(document.getElementById('add-expires').value);
+  const ico = document.getElementById('add-icon').value;
+  if(!name || !cat || !qty || !exp){ showToast('Fill all fields!'); return; }
+  state.foods.push({ id: state.nextId++, name: name, emoji: ico, category: cat, qty: qty, expires: exp });
+  showToast('Food Added!');
+  backToFoodList();
+}
+
+function openEditFood(){
+  const f=state.foods.find(f=>f.id===state.currentFoodId);
+  document.getElementById('edit-name').value=f.name;
+  document.getElementById('edit-category').value=f.category;
+  document.getElementById('edit-category-display').textContent=f.category;
+  document.getElementById('edit-qty').value=f.qty;
+  document.getElementById('edit-expires').value=f.expires;
+  document.getElementById('edit-icon').value=f.emoji;
+  document.getElementById('edit-icon-display').textContent=f.emoji;
+  navigate('editfood');
+}
+
+function saveEditFood(){
+  const f=state.foods.find(f=>f.id===state.currentFoodId);
+  f.name=document.getElementById('edit-name').value.trim()||f.name;
+  f.qty=parseInt(document.getElementById('edit-qty').value)||f.qty;
+  f.expires=parseInt(document.getElementById('edit-expires').value)||f.expires;
+  f.emoji=document.getElementById('edit-icon').value;
+  showToast('Changes Saved!');
+  navigate('fooddetail');
+}
+
+function renderDashboard() {
+  const urgent = state.foods.filter(f => f.qty > 0 && f.expires <= 1).length;
+  const activeItems = state.foods.filter(f => f.qty > 0).length;
+  let html = `
+    <div class="dash-grid">
+      <div class="dash-card" style="background:#2d6a2d;"><div class="ico">📦</div><div class="num">${activeItems}</div><div class="lbl">Active Items</div></div>
+      <div class="dash-card" style="background:#c0392b;"><div class="ico">⚠️</div><div class="num">${urgent}</div><div class="lbl">Expiring &le; 1 Day</div></div>
+    </div>
+    <div class="section-title" style="font-size:18px; margin-top:10px;">Quick Summary</div>
+    <div class="card-list">
+      <div class="card-item" onclick="navigate('categories')">
+        <div class="card-emoji" style="background:#e8f8ee">🗂️</div>
+        <div style="flex:1"><div class="card-label">Food Categories</div><div class="card-sub">${CATEGORIES.length} Categories Registered</div></div>
+        <span class="card-arrow">›</span>
+      </div>
+    </div>
+  `;
+  document.getElementById('dashboard-content').innerHTML = html;
+}
+
+function renderStats(){
+  const total = state.foods.reduce((s,f)=>s+f.qty,0);
+  let html = `
+    <div class="stats-grid">
+      <div class="stats-mini"><div class="sm-ico">😋</div><div class="sm-val">${state.consumed}</div><div class="sm-lbl">Items Consumed</div></div>
+      <div class="stats-mini"><div class="sm-ico">🗑️</div><div class="sm-val">${state.discarded}</div><div class="sm-lbl">Items Wasted</div></div>
+    </div>
+    <div class="chart-card"><div class="chart-card-title">Stock distribution by Category</div>
+  `;
+  CATEGORIES.forEach(cat => {
+    const count = state.foods.filter(f=>f.category===cat.name).reduce((s,f)=>s+f.qty,0);
+    const pct = total > 0 ? Math.round((count/total)*100) : 0;
+    html += `
+      <div class="stat-bar-wrap">
+        <div class="stat-bar-label"><span>${cat.emoji} ${cat.name}</span><strong>${count} u (${pct}%)</strong></div>
+        <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${pct}%; background:var(--green-dark)"></div></div>
+      </div>
+    `;
+  });
+  html += `</div>`;
+  document.getElementById('statistics-content').innerHTML = html;
+}
+
+function renderAccount(){
+  document.getElementById('acc-name').textContent = state.profile.name;
+  document.getElementById('acc-email').textContent = state.profile.email;
+  document.getElementById('acc-summary').innerHTML = `
+    <div class="profile-info-row"><span class="profile-info-key">Total Consumed</span><span class="profile-info-val">${state.consumed} Units</span></div>
+    <div class="profile-info-row"><span class="profile-info-key">Total Discarded</span><span class="profile-info-val">${state.discarded} Units</span></div>
+  `;
+}
+
+function saveProfile(){
+  state.profile.name = document.getElementById('ep-name').value;
+  state.profile.email = document.getElementById('ep-email').value;
+  showToast('Profile Updated!'); navigate('account');
+}
+
+function togglePicker(mode){
+  const dropdown = document.getElementById(mode+'-icon-dropdown');
+  dropdown.classList.toggle('open');
+  if(dropdown.classList.contains('open')){
+    dropdown.innerHTML = `<div class="emoji-grid">` + EMOJI_LIST.map(e=>`<button class="emoji-btn" onclick="selectEmoji('${mode}','${e}')">${e}</button>`).join('') + `</div>`;
+  }
+}
+function selectEmoji(mode, emoji){
+  document.getElementById(mode+'-icon').value = emoji;
+  document.getElementById(mode+'-icon-display').textContent = emoji;
+  document.getElementById(mode+'-icon-dropdown').classList.remove('open');
+}
+
+function handleSearch(query){
+  if(state.currentPage !== 'foodlist' && query.trim() !== ''){ state.currentCategory = CATEGORIES[0].name; navigate('foodlist'); }
+  const q = query.toLowerCase().trim();
+  const foods = state.foods.filter(f=>f.category===state.currentCategory && f.qty>0 && f.name.toLowerCase().includes(q));
+  const el = document.getElementById('foodlist-items');
+  if(!foods.length){ el.innerHTML = `<div class="empty"><div class="empty-ico">🔍</div><div>No results found.</div></div>`; return; }
+  el.innerHTML = foods.map(f=>`
+    <div class="card-item" onclick="openFoodDetail(${f.id})">
+      <div class="card-emoji" style="background:rgba(255,255,255,0.5)">${f.emoji}</div>
+      <div style="flex:1"><div class="card-label">${f.name} ${badge(f.expires)}</div><div class="card-sub">Count: ${f.qty}</div></div>
+      <span class="card-arrow">›</span>
+    </div>`).join('');
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2000);
+}
+
+// INITIALIZE APP FROM LANDING
+window.onload = () => {
+  navigate('landing');
+};
+</script>
+</body>
+</html>
